@@ -1,65 +1,54 @@
 import React, { useState } from 'react';
-import { LayoutGrid } from 'lucide-react';
+import { authAPI } from './api';
+import { useNavigate, Link } from 'react-router-dom';
 
-const Login = ({ onLogin }) => {
-  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Mock login - in real app, validate credentials with backend
-    if (loginForm.email && loginForm.password) {
-      onLogin({
-        name: 'John Doe',
-        email: loginForm.email
-      });
+    setError('');
+    try {
+      await authAPI.login(email, password);
+      navigate('/');
+    } catch (err) {
+      setError(err.message || 'Failed to login');
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="login-header">
-          <LayoutGrid className="logo-icon" />
-          <h1>ProjectManager</h1>
-          <p>Centralized project management dashboard</p>
+    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', boxShadow: '0 0 10px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
+      <h2 style={{ textAlign: 'center' }}>Login</h2>
+      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: '15px' }}>
+          <label style={{ display: 'block', marginBottom: '5px' }}>Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+          />
         </div>
-        
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="email">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="you@company.com"
-              value={loginForm.email}
-              onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Enter your password"
-              value={loginForm.password}
-              onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-              required
-            />
-          </div>
-          
-          <button type="submit" className="btn-primary btn-full">
-            Sign In
-          </button>
-          
-          <div className="login-footer">
-            <a href="#forgot">Forgot password?</a>
-            <span>•</span>
-            <a href="#signup">Create account</a>
-          </div>
-        </form>
-      </div>
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '5px' }}>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+          />
+        </div>
+        <button type="submit" style={{ width: '100%', padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Login</button>
+      </form>
+      <p style={{ textAlign: 'center', marginTop: '15px' }}>
+        Don't have an account? <Link to="/register">Create Account</Link>
+      </p>
     </div>
   );
 };
