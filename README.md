@@ -86,6 +86,20 @@ This repository contains a full-stack project with a React frontend and an Expre
 
 > If you have deployed this project, replace the above line with the actual URL.
 
+## Render Deployment
+This project includes a `render.yaml` configuration file for the backend service.
+
+To deploy the backend on Render:
+1. Connect the GitHub repository to Render.
+2. Create a new web service and select this repository.
+3. Use the `render.yaml` file to deploy the backend automatically.
+4. In Render, configure these environment variables:
+   - `MONGODB_URI`
+   - `JWT_SECRET`
+5. Render will provide a public backend URL once deployment completes.
+
+> Do not commit any secret values to the repository. Set secrets directly in Render's environment configuration.
+
 ## Architecture Explanation
 
 This project is structured as two main services:

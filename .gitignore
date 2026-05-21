@@ -1,0 +1,6 @@
+# Ignore local environment files
+Backend/.env
+Frontend/.env
+
+# Node modules
+**/node_modules

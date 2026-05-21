@@ -1,0 +1,9 @@
+services:
+  - type: web_service
+    name: todo-backend
+    env: node
+    plan: free
+    branch: main
+    buildCommand: cd Backend && npm install
+    startCommand: cd Backend && npm run start
+    autoDeploy: true
